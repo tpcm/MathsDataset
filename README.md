@@ -15,19 +15,16 @@ To set up the project on your machine, follow these steps:
 
 Clone the repository to your machine:
 ```bash
-Copy code
 git clone https://github.com/[insert repository URL here].git
 ```
 
 Navigate to the project directory:
 ```bash
-Copy code
 cd [insert project directory name here]
 ```
 
 Install the dependencies:
 ```bash
-Copy code
 [insert command to install dependencies here]
 ```
 Usage
