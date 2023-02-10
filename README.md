@@ -6,13 +6,13 @@ This project involves working with a math dataset that has been collected from h
 
 MATH is a new dataset of 12,500 challenging competition mathematics problems. Each problem in MATH has a full step-by-step solution which can be used to teach models to generate answer derivations and explanations.
 
-Prerequisites
+###### Prerequisites
 
 Before you begin, you will need to have the following software installed on your machine:
 
 [Insert software dependencies here]
 
-Installation
+###### Installation
 
 To set up the project on your machine, follow these steps:
 
@@ -30,17 +30,22 @@ Install the dependencies:
 ```bash
 [insert command to install dependencies here]
 ```
-Usage
+
+###### Usage
 
 To use the project, follow these steps:
 
 [Insert steps to use the project here]
-Contributing
+
+###### Contributing
 If you would like to contribute to this project, please follow these steps:
 
 [Insert steps for contributing to the project here]
-License
+
+###### License
+
 This project is licensed under the [insert license name here] license. See the LICENSE file for more information.
 
-Acknowledgments
+###### Acknowledgments
+
 [Insert acknowledgments here]
