@@ -30,6 +30,7 @@ def read_into_dict(path, train_or_test) -> Dict:
             train_data[dirpath.split("\\")[-1]] = subdirs_data
     return train_data
 
+# NEED TO CHECK IF FILE EXISTS AT SOURCE IN MOVE_FILE FN
 def move_file(source, destination_dir, logging_dst=r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log'):
     """
     This function moves a file from the source to the destination directory, while ensuring that a file with the same name does not exist in the destination directory. 
