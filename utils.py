@@ -1,6 +1,7 @@
 import os
 import shutil
 import logging
+import datetime
 import pandas
 import tarfile
 import json
@@ -30,7 +31,6 @@ def read_into_dict(path, train_or_test) -> Dict:
             train_data[dirpath.split("\\")[-1]] = subdirs_data
     return train_data
 
-# NEED TO CHECK IF FILE EXISTS AT SOURCE IN MOVE_FILE FN
 def move_file(source, destination_dir, logging_dst=r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log'):
     """
     This function moves a file from the source to the destination directory, while ensuring that a file with the same name does not exist in the destination directory. 
@@ -40,35 +40,63 @@ def move_file(source, destination_dir, logging_dst=r'C:\Users\t_p_c\OneDrive\Doc
     Parameters:
         source (str): The source file path to move.
         destination_dir (str): The destination directory path to move the file to.
-        logging_dst (str, optional): The log file path. Defaults to r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log'.
+        logging_dst (str, optional): The log file path. Defaults to 'C:/Users/t_p_c/OneDrive/Documents/GitHub/MathsDataset/Data/logs/move_file.log'.
 
     Returns:
         bool: True if the move was successful, False otherwise.
     """
-    destination_file_name = "/".join([destination_dir, os.path.basename(source)])
+    logging.basicConfig(filename=logging_dst, level=logging.ERROR)
+
+    if not os.path.exists(source):
+        logging.error(f"File not found at source. {datetime.datetime.now()}")
+        return False
     
+    destination_file_name = "/".join([destination_dir, os.path.basename(source)])
+
     if os.path.exists(destination_file_name):
         base, ext = os.path.splitext(destination_file_name)
-        
         try:
             i = 0
             while os.path.exists(f"{base}_{i}{ext}"):
                 i+=1
             destination_file_name = f"{base}_{i}{ext}"
         except Exception as e:
-            logging.basicConfig(filename=logging_dst, level=logging.ERROR)
-            logging.error(f"An error occured while attempting to rename the file {destination_file_name}: {e}")
+            logging.error(f"An error occured while attempting to rename the file {destination_file_name}: {e}. {datetime.datetime.now()}")
     
     try:
         shutil.move(src=source, dst=destination_file_name)
     except Exception as e:
-        logging.basicConfig(filename=logging_dst, level=logging.ERROR)
-        logging.error(f"An error occured while attempting to move the file {source} to {destination_file_name}: {e}")
+        logging.error(f"An error occured while attempting to move the file {source} to {destination_file_name}: {e}. {datetime.datetime.now()}")
         return False
 
     return True
 
+def move_files_in_folder(source_dir=r'C:\Users\t_p_c\DataEng\Beginner Challenges', destination_dir=r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\incoming', logging_dst=r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log'):
+    """
+    This function moves all files in a given source directory to a specified destination directory, while logging any errors that occur during the move process in the specified log file.
 
+    Parameters:
+        source_dir (str, optional): The source directory to move files from. Defaults to r'C:\Users\t_p_c\DataEng\Beginner Challenges'.
+        destination_dir (str, optional): The destination directory to move files to. Defaults to r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\incoming'.
+        logging_dst (str, optional): The log file path. Defaults to r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log'.
+
+    Returns:
+        bool: True if all files in the source directory were moved successfully, False otherwise.
+    """
+    logging.basicConfig(filename=logging_dst, level=logging.ERROR)
+    if os.path.exists(source_dir):
+        try:
+            for file in os.listdir(source_dir):
+                source_file = os.path.join(source_dir, file)
+                if os.path.isfile(source_file):
+                    move_file(source_file, destination_dir)
+        except Exception as e:
+            logging.error(f"An error occured while attempting to scan the source folder for incoming files, {e}. {datetime.datetime.now()}")
+            return False
+    else:
+        logging.error(f"Source directory not found. {datetime.datetime.now()}")
+        return False
+    return True
 
 """""""     Pre-processing  """""""
 
