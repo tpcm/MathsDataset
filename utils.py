@@ -8,33 +8,44 @@ import json
 import re
 from typing import Dict
 
+logging.basicConfig(filename=r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log', level=logging.ERROR)
+
 def read_into_dict(path, train_or_test) -> Dict:
     """
     Load all .json files in a directory and its subdirectories into a dictionary.
-    
+
     Parameters:
     path (str): The path to the directory to be loaded.
     train_or_test (str): The name of the subdirectory to be ignored.
-    
+
     Returns:
-    Dict: A dictionary with subdirectory names as keys and lists of dictionaries as values, 
+    Dict: A dictionary with subdirectory names as keys and lists of dictionaries as values,
     each representing a .json file.
     """
     train_data = {}
-    for dirpath, subdirs, files in os.walk(path):
-        subdirs_data = []
-        for file in files:
-            if file.endswith(".json"):
-                with open(os.path.join(dirpath, file)) as f:
-                    subdirs_data.append(json.load(f))
-        if dirpath.split("\\")[-1] != train_or_test:
-            train_data[dirpath.split("\\")[-1]] = subdirs_data
+    try:
+        for dirpath, subdirs, files in os.walk(path):
+            subdirs_data = []
+            for file in files:
+                if file.endswith(".json"):
+                    with open(os.path.join(dirpath, file)) as f:
+                        subdirs_data.append(json.load(f))
+            if dirpath.split("\\")[-1] != train_or_test:
+                train_data[dirpath.split("\\")[-1]] = subdirs_data
+    except Exception as e:
+        logging.error(
+            f"An error occured while attempting to read the file ito a dictionary {path}: {e}. {datetime.datetime.now()}"
+        )
     return train_data
 
-def move_file(source, destination_dir, logging_dst=r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log'):
+def move_file(
+    source,
+    destination_dir,
+    logging_dst=r"C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log",
+):
     """
-    This function moves a file from the source to the destination directory, while ensuring that a file with the same name does not exist in the destination directory. 
-    If a file with the same name exists, it will rename the file by appending a number to the end of the file name. 
+    This function moves a file from the source to the destination directory, while ensuring that a file with the same name does not exist in the destination directory.
+    If a file with the same name exists, it will rename the file by appending a number to the end of the file name.
     The function will log any error that occurs during the move process in the specified log file.
 
     Parameters:
@@ -45,12 +56,12 @@ def move_file(source, destination_dir, logging_dst=r'C:\Users\t_p_c\OneDrive\Doc
     Returns:
         bool: True if the move was successful, False otherwise.
     """
-    logging.basicConfig(filename=logging_dst, level=logging.ERROR)
+    # logging.basicConfig(filename=logging_dst, level=logging.ERROR)
 
     if not os.path.exists(source):
         logging.error(f"File not found at source. {datetime.datetime.now()}")
         return False
-    
+
     destination_file_name = "/".join([destination_dir, os.path.basename(source)])
 
     if os.path.exists(destination_file_name):
@@ -58,40 +69,55 @@ def move_file(source, destination_dir, logging_dst=r'C:\Users\t_p_c\OneDrive\Doc
         try:
             i = 0
             while os.path.exists(f"{base}_{i}{ext}"):
-                i+=1
+                i += 1
             destination_file_name = f"{base}_{i}{ext}"
         except Exception as e:
-            logging.error(f"An error occured while attempting to rename the file {destination_file_name}: {e}. {datetime.datetime.now()}")
-    
+            logging.error(
+                f"An error occured while attempting to rename the file {destination_file_name}: {e}. {datetime.datetime.now()}"
+            )
+
     try:
         shutil.move(src=source, dst=destination_file_name)
     except Exception as e:
-        logging.error(f"An error occured while attempting to move the file {source} to {destination_file_name}: {e}. {datetime.datetime.now()}")
+        logging.error(
+            f"An error occured while attempting to move the file {source} to {destination_file_name}: {e}. {datetime.datetime.now()}"
+        )
         return False
 
     return True
 
-def move_files_in_folder(source_dir=r'C:\Users\t_p_c\DataEng\Beginner Challenges', destination_dir=r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\incoming', logging_dst=r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log'):
+
+def move_files_in_folder(
+    source_dir=r"C:\Users\t_p_c\DataEng\Beginner Challenges",
+    destination_dir=r"C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\incoming",
+    logging_dst=r"C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log",
+):
     """
     This function moves all files in a given source directory to a specified destination directory, while logging any errors that occur during the move process in the specified log file.
 
     Parameters:
-        source_dir (str, optional): The source directory to move files from. Defaults to r'C:\Users\t_p_c\DataEng\Beginner Challenges'.
-        destination_dir (str, optional): The destination directory to move files to. Defaults to r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\incoming'.
-        logging_dst (str, optional): The log file path. Defaults to r'C:\Users\t_p_c\OneDrive\Documents\GitHub\MathsDataset\Data\logs\move_file.log'.
+        source_dir (str, optional): The source directory to move files from. Defaults to r'C:/Users/t_p_c/DataEng/Beginner Challenges'.
+        destination_dir (str, optional): The destination directory to move files to. Defaults to r'C:/Users/t_p_c/OneDrive/Documents/GitHub/MathsDataset/Data/incoming'.
+        logging_dst (str, optional): The log file path. Defaults to r'C:/Users/t_p_c/OneDrive/Documents/GitHub/MathsDataset/Data/logs/move_file.log'.
 
     Returns:
         bool: True if all files in the source directory were moved successfully, False otherwise.
     """
-    logging.basicConfig(filename=logging_dst, level=logging.ERROR)
+    # logging.basicConfig(filename=logging_dst, level=logging.ERROR)
     if os.path.exists(source_dir):
         try:
-            for file in os.listdir(source_dir):
-                source_file = os.path.join(source_dir, file)
-                if os.path.isfile(source_file):
-                    move_file(source_file, destination_dir)
+            if os.listdir(source_dir):
+                for file in os.listdir(source_dir):
+                    source_file = os.path.join(source_dir, file)
+                    if os.path.isfile(source_file):
+                        move_file(source_file, destination_dir)
+            else:
+                logging.error(f"Source directiory is empty. {datetime.datetime.now()}")
+                return False
         except Exception as e:
-            logging.error(f"An error occured while attempting to scan the source folder for incoming files, {e}. {datetime.datetime.now()}")
+            logging.error(
+                f"An error occured while attempting to scan the source folder for incoming files, {e}. {datetime.datetime.now()}"
+            )
             return False
     else:
         logging.error(f"Source directory not found. {datetime.datetime.now()}")
@@ -100,7 +126,7 @@ def move_files_in_folder(source_dir=r'C:\Users\t_p_c\DataEng\Beginner Challenges
 
 """""""     Pre-processing  """""""
 
-def parse_final_answer(sample, first_match="\\boxed", second_match="\\fbox"):
+def parse_final_answer(sample, first_match="\\\boxed", second_match="\\fbox"):
     """
     Find the final answer in a math problem text.
     
