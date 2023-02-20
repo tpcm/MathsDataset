@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "mathsdataset"
+version = "0.1.0"
+description = "This project involves working with a math dataset that has been collected from https://paperswithcode.com/dataset/math."
+authors = ["tpcm <72707613+tpcm@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^1.5.3"
+nltk = "^3.8.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
