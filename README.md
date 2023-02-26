@@ -5,11 +5,11 @@ This project aims to leverage the challenge of creating an ML model capable of a
 ###### Data Sources
 The main data source used in this project is the MATH dataset collected from https://paperswithcode.com/dataset/math. It contains mathematical questions and their corresponding answers in LaTeX textual format, designed for machine learning tasks, especially for training models to answer math problems. MATH dataset consists of 12,500 challenging competition mathematics problems, each with a full step-by-step solution to teach models to generate answer derivations and explanations. The dataset includes various question types like arithmetic, algebra, calculus, and more, making it an essential resource for developing and testing machine learning models for mathematical question answering tasks.
 
-###### Preprocessing
+##### Preprocessing
 
-###### Storage
+##### Storage
 
-###### Data Model
+##### Data Model
 
 ##### Data Analysis & Transformation
 
